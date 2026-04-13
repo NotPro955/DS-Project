@@ -8,6 +8,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "converstion/freq.h"
+
+long freq_count[256] = {0};
 
 int main(int argc, char *argv[]){
     if (argc != 2){
@@ -24,10 +27,11 @@ int main(int argc, char *argv[]){
             printf("\n----------------------------------------------------------------\n");
 
             switch(ch){
-                case 1:printf("\nCompressing the file\n");break;
+                case 1:printf("\nCompressing the file\n");freq(argv[1]);break;
                 case 2:printf("\nDecomprssing the file\n");break;
                 case 3:return 0; break;
                 default: printf("\nInvalid Choice\n");
             }
         }
     }
+}
