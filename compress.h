@@ -20,7 +20,30 @@ void write_bit(FILE *f, unsigned char *byte, int *bit_pos, int bit) {
     }
 }
 
-int compress(const char *input_path,char output[50]) {
+/* -- Tree serialiser (pre-order, bit-packed) --------------------------------
+   Format per node:
+     Internal node : bit 0, then recurse left then right
+     Leaf node     : bit 1, then 8 bits of symbol value
+   For N unique symbols the tree costs (2N-1) + 8N = 10N-1 bits.
+   24 unique chars -> ceil(239/8) = 30 bytes  vs  24*5+2 = 122 bytes sparse.
+--------------------------------------------------------------------------- */
+static void write_tree(FILE *f, HuffNode *node,
+                        unsigned char *byte, int *bit_pos) {
+    int i;
+    if (node->ch != -1) {
+        /* Leaf */
+        write_bit(f, byte, bit_pos, 1);
+        for (i = 7; i >= 0; i--)
+            write_bit(f, byte, bit_pos, (node->ch >> i) & 1);
+    } else {
+        /* Internal */
+        write_bit(f, byte, bit_pos, 0);
+        write_tree(f, node->left,  byte, bit_pos);
+        write_tree(f, node->right, byte, bit_pos);
+    }
+}
+
+int compress(const char *input_path, char output[50]) {
     /* ALL declarations at the top -- required by C89 */
     FILE         *in;
     FILE         *out;
@@ -32,6 +55,7 @@ int compress(const char *input_path,char output[50]) {
     int           bit_pos = 0;
     int           ch;
     int           i;
+    unsigned int  total   = 0;
 
     in = fopen(input_path, "rb");
     if (!in) { perror("compress: fopen input"); return 1; }
@@ -47,13 +71,19 @@ int compress(const char *input_path,char output[50]) {
     memset(codes, 0, sizeof(codes));
     generate_codes(root, codes, buf, 0);
 
-    /* 3. Open output and write header (frequency table) */
-    out = fopen(strcat(output,".5g"),"wb");
+    /* 3. Open output file */
+    out = fopen(strcat(output, ".5g"), "wb");
     if (!out) { perror("compress: fopen output"); fclose(in); return 1; }
 
-    fwrite(freq, sizeof(long), 256, out);
+    /* 4. Write header:
+          [uint32 total_chars] then the Huffman tree packed as bits.
+          The data bits follow immediately in the same byte stream.        */
+    for (i = 0; i < 256; i++) total += (unsigned int)freq[i];
+    fwrite(&total, sizeof(unsigned int), 1, out);   /* 4 bytes */
 
-    /* 4. Encode and write each character */
+    write_tree(out, root, &byte, &bit_pos);         /* ~30 bytes for 24 syms */
+
+    /* 5. Encode and write each character */
     while ((ch = fgetc(in)) != EOF) {
         for (i = 0; codes[ch][i]; i++)
             write_bit(out, &byte, &bit_pos, codes[ch][i] == '1');
@@ -68,4 +98,5 @@ int compress(const char *input_path,char output[50]) {
     free_tree(root);
     return 0;
 }
+
 #endif /* COMPRESS_H */

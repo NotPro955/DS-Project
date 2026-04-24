@@ -9,7 +9,6 @@
 #include "huffman.h"
 
 /* -- Bit reader ------------------------------------------------------------ */
-
 static int read_bit(FILE *f, unsigned char *byte, int *bit_pos) {
     int bit;
     if (*bit_pos == 0) {
@@ -20,42 +19,62 @@ static int read_bit(FILE *f, unsigned char *byte, int *bit_pos) {
     return bit;
 }
 
-/* -- Decompress ------------------------------------------------------------ */
+/* -- Tree deserialiser -----------------------------------------------------
+   Mirrors write_tree in compress.h:
+     Read 1 bit: 1 = leaf (read 8-bit symbol), 0 = internal (recurse L+R)
+--------------------------------------------------------------------------- */
+static HuffNode *read_tree(FILE *f, unsigned char *byte, int *bit_pos) {
+    int bit = read_bit(f, byte, bit_pos);
+    if (bit == -1) return NULL;
 
+    if (bit == 1) {
+        /* Leaf: read 8-bit symbol */
+        int ch = 0, i;
+        for (i = 7; i >= 0; i--) {
+            int b = read_bit(f, byte, bit_pos);
+            if (b == -1) return NULL;
+            ch |= (b << i);
+        }
+        return huff_new_node(ch, 0);
+    } else {
+        /* Internal node */
+        HuffNode *node  = huff_new_node(-1, 0);
+        node->left      = read_tree(f, byte, bit_pos);
+        node->right     = read_tree(f, byte, bit_pos);
+        return node;
+    }
+}
+
+/* -- Decompress ------------------------------------------------------------ */
 static int decompress(const char *input_path, char output_path[50]) {
     /* ALL declarations at the top -- required by C89 */
     FILE          *in;
     FILE          *out;
     HuffNode      *root;
     HuffNode      *node;
-    long           freq[256];
-    long           total   = 0;
-    long           decoded = 0;
+    unsigned int   total   = 0;
+    unsigned int   decoded = 0;
     unsigned char  byte    = 0;
     int            bit_pos = 0;
     int            bit;
-    int            i;
 
     in = fopen(input_path, "rb");
     if (!in) { perror("decompress: fopen input"); return 1; }
 
-    /* 1. Read frequency table from header */
-    if (fread(freq, sizeof(long), 256, in) != 256) {
+    /* 1. Read total character count (4 bytes) */
+    if (fread(&total, sizeof(unsigned int), 1, in) != 1) {
         fprintf(stderr, "decompress: bad header\n");
         fclose(in); return 1;
     }
 
-    /* 2. Count total original characters */
-    for (i = 0; i < 256; i++) total += freq[i];
+    /* 2. Reconstruct the Huffman tree from bit-packed pre-order data */
+    root = read_tree(in, &byte, &bit_pos);
+    if (!root) { fclose(in); fprintf(stderr, "decompress: bad tree\n"); return 1; }
 
-    /* 3. Rebuild the Huffman tree */
-    root = build_huffman_tree(freq);
-    if (!root) { fclose(in); fprintf(stderr, "decompress: empty file\n"); return 1; }
-
-    out = fopen(strcat(output_path,".txt"), "wb");
+    out = fopen(strcat(output_path, ".txt"), "wb");
     if (!out) { perror("decompress: fopen output"); fclose(in); return 1; }
 
-    /* 4. Decode bits by walking the tree */
+    /* 3. Decode bits by walking the tree */
     node = root;
     while (decoded < total) {
         bit = read_bit(in, &byte, &bit_pos);
