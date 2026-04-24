@@ -51,27 +51,31 @@ The program is operated from the command line and prompts for the output filenam
 3. It decodes the bit stream using the tree.
 4. The decoded result is written to a `.txt` output file.
 
-## Build
+## Build (Linux/windows/Mac OS)
 
 Compile with `gcc`:
 
 ```bash
-gcc main.c -o main
-```
-
-If your compiler defaults are stricter, this also works well:
-
-```bash
-gcc -std=c99 -Wall -Wextra main.c -o main
+gcc main.c -o main 
 ```
 
 ## Usage
 
 ### Compress a file
-
+## windows ##
 ```bash
-./main <filename> --compress
+./a <filename> --compress
 ```
+## Linux ##
+```bash
+./a <filename> --compress
+```
+## Mac ##
+```bash
+./a.out <filename> --compress
+```
+
+
 
 Example:
 
@@ -87,10 +91,18 @@ The program will ask for an output name, then create:
 
 ### Decompress a file
 
+## windows ##
 ```bash
-./main <filename> --decompress
+./a <filename> --decompress
 ```
-
+## Linux ##
+```bash
+./a <filename> --decompress
+```
+## Mac ##
+```bash
+./a.out <filename> --decompress
+```
 Example:
 
 ```bash
