@@ -72,7 +72,7 @@ int compress(const char *input_path, char output[50]) {
     generate_codes(root, codes, buf, 0);
 
     /* 3. Open output file */
-    out = fopen(strcat(output, ".5g"), "wb");
+    out = fopen(strcat(output, ".g5"), "wb");
     if (!out) { perror("compress: fopen output"); fclose(in); return 1; }
 
     /* 4. Write header:
