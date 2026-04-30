@@ -1,10 +1,10 @@
 # DS-Project
 
-A simple file compression and decompression project written in C using Huffman coding.
+A simple file compression and decompression project written in C using Huffman coding by Geeks 5.
 
 ## Overview
 
-This project:
+This project: 
 
 - reads a text or binary file
 - counts byte frequencies
