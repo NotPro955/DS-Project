@@ -1,81 +1,92 @@
-# DS-Project
+# 📦 File Compressor using Huffman Coding (DS Project)
 
-A simple file compression and decompression project written in C using Huffman coding by Geeks 5.
+A simple and efficient file compression and decompression tool written in C using **Huffman Coding**, developed by *Geeks 5*.
 
-## Overview
+---
 
-This project: 
+## 🚀 Overview
 
-- reads a text or binary file
-- counts byte frequencies
-- builds a Huffman tree
-- compresses the file into a `.g5` format
-- decompresses a `.g5` file back into a `.txt` file
+This project demonstrates how lossless data compression works using Huffman encoding.
 
-The program is operated from the command line and prompts for the output filename during compression and decompression.
+The program:
 
-## Project Structure
+* Reads a file (text or binary)
+* Calculates frequency of each byte
+* Builds a Huffman Tree
+* Encodes data into compressed format (`.g5`)
+* Decodes compressed file back to original (`.txt`)
 
-- `main.c`  
-  Entry point for the CLI. Handles command-line arguments and calls compression or decompression.
+---
 
-- `freq.h`  
-  Counts and prints character frequencies from the input file.
+## 🧠 Concept Used
 
-- `huffman.h`  
-  Defines the Huffman tree, min-heap, code generation, and memory cleanup helpers.
+* Huffman Coding (Greedy Algorithm)
+* Binary Trees
+* Min Heap (Priority Queue)
+* Bit-level file handling
 
-- `compress.h`  
-  Handles Huffman-based compression and writes compressed output to a `.g5` file.
+---
 
-- `decompress.h`  
-  Rebuilds the Huffman tree from the compressed file and restores the original contents into a `.txt` file.
+## 📁 Project Structure
 
-## How It Works
-
-### Compression
-
-1. The program reads the input file.
-2. It counts the frequency of each byte.
-3. A Huffman tree is built from those frequencies.
-4. Huffman codes are generated for each symbol.
-5. The compressed file stores:
-   - total character count
-   - serialized Huffman tree
-   - encoded file data
-
-### Decompression
-
-1. The program reads the compressed `.g5` file.
-2. It rebuilds the Huffman tree from the stored header.
-3. It decodes the bit stream using the tree.
-4. The decoded result is written to a `.txt` output file.
-
-## Build (Linux/windows/Mac OS)
-
-Compile with `gcc`:
-
-```bash
-gcc main.c -o main 
+```
+.
+├── main.c          → CLI interface and program flow
+├── freq.h          → Frequency calculation  
+├── huffman.h       → Tree + heap + code generation
+├── compress.h      → Compression logic
+├── decompress.h    → Decompression logic
+└── README.md
 ```
 
-## Usage
+---
 
-### Compress a file
-## windows ##
+## ⚙️ How It Works
+
+### 🔹 Compression
+
+1. Read input file
+2. Count frequency of each character
+3. Build Huffman Tree
+4. Generate binary codes
+5. Store:
+
+   * Total characters
+   * Encoded Huffman tree
+   * Compressed data
+
+Output file → `.g5`
+
+---
+
+### 🔹 Decompression
+
+1. Read `.g5` file
+2. Reconstruct Huffman Tree
+3. Decode bit stream
+4. Write original data
+
+Output file → `.txt`
+
+---
+
+## 🛠️ Build Instructions
+
+Compile using GCC:
+
 ```bash
-./a <filename> --compress
-```
-## Linux ##
-```bash
-./a <filename> --compress
-```
-## Mac ##
-```bash
-./a.out <filename> --compress
+gcc main.c -o main
 ```
 
+---
 
+## ▶️ Usage
+
+### Compress
+
+```bash
+./main <filename> --compress
+```
 
 Example:
 
@@ -83,58 +94,98 @@ Example:
 ./main sample.txt --compress
 ```
 
-The program will ask for an output name, then create:
+Then enter output name → creates:
 
-```text
-<output_name>.g5
+```
+output.g5
 ```
 
-### Decompress a file
+---
 
-## windows ##
+### Decompress
+
 ```bash
-./a <filename> --decompress
+./main <filename> --decompress
 ```
-## Linux ##
-```bash
-./a <filename> --decompress
-```
-## Mac ##
-```bash
-./a.out <filename> --decompress
-```
+
 Example:
 
 ```bash
-./main compressed.g5 --decompress
+./main sample.g5 --decompress
 ```
 
-The program will ask for an output name, then create:
+Then enter output name → creates:
 
-```text
-<output_name>.txt
+```
+output.txt
 ```
 
-## Example Flow
+---
+
+## 📊 Example
 
 ```bash
 gcc main.c -o main
 ./main input.txt --compress
-./main input_compressed.g5 --decompress
+./main input.g5 --decompress
 ```
 
-## Notes
+---
 
-- Compression output always gets the `.g5` extension appended automatically.
-- Decompression output always gets the `.txt` extension appended automatically.
-- The program prints a frequency table before compression.
-- Empty input files are currently rejected during compression.
-- Output filenames are read interactively from standard input.
+## ✨ Features
 
-## Future Improvements
+* Lossless compression
+* Custom `.g5` format
+* Bit-level encoding
+* Tree serialization
+* Works on any file type
 
-- support non-interactive output filenames through command-line flags
-- improve validation and error handling
-- add a `Makefile`
-- add automated test cases
-- better handling for edge cases and malformed compressed files
+---
+
+## ⚠️ Limitations
+
+* Output filename must be entered manually
+* No GUI (command line only)
+* Limited error handling
+* Not optimized for very large files
+
+---
+
+## 🔮 Future Improvements
+
+* Add command-line flags for output file
+* Improve error handling
+* Add Makefile
+* Add GUI interface
+* Optimize compression ratio
+
+---
+
+## 👨‍💻 Team
+
+**Geeks 5**
+
+* Mukesh
+* Raghav
+* Shanmukh
+* Bharath
+
+---
+
+## 📌 Notes
+
+* Compression appends `.g5` automatically
+* Decompression appends `.txt` automatically
+* Empty files are not supported
+
+---
+
+## 📚 Reference
+
+Basic implementation inspired from standard Huffman Coding concepts and data structures.
+
+---
+
+## 💡 Final Thought
+
+This project is a practical implementation of how real-world compression systems work at a low level using bits and trees.
