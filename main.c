@@ -6,9 +6,24 @@
 #include "decompress.h"
 
 void usage_print(){
-    printf("Invalid Command\n");
-    printf("./main <filename> --compress\n");
-    printf("./main <filename> --decompress\n");
+    printf("\n");
+    printf("====================================================\n");
+    printf("       Welcome to the Geeks 5 File Compressor\n");
+    printf("====================================================\n\n");
+
+    printf("Usage:\n");
+    printf("  ./main <filename> --compress\n");
+    printf("  ./main <filename> --decompress\n\n");
+
+    printf("Examples:\n");
+    printf("  ./main sample.txt --compress\n");
+    printf("  ./main sample.g5 --decompress\n\n");
+
+    printf("Output:\n");
+    printf("  Compression creates a .g5 file\n");
+    printf("  Decompression creates a .txt file\n\n");
+
+    printf("Tip: You will be asked to enter the output file name after running the command.\n\n");
 }
 
 long get_file_size(const char *filename) {
