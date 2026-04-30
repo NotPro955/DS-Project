@@ -1,10 +1,10 @@
-# 📦 File Compressor using Huffman Coding (DS Project)
+# File Compressor using Huffman Coding (DS Project)
 
 A simple and efficient file compression and decompression tool written in C using **Huffman Coding**, developed by *Geeks 5*.
 
 ---
 
-## 🚀 Overview
+##  Overview
 
 This project demonstrates how lossless data compression works using Huffman encoding.
 
@@ -18,7 +18,7 @@ The program:
 
 ---
 
-## 🧠 Concept Used
+## Concept Used
 
 * Huffman Coding (Greedy Algorithm)
 * Binary Trees
@@ -27,7 +27,7 @@ The program:
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 .
@@ -41,9 +41,9 @@ The program:
 
 ---
 
-## ⚙️ How It Works
+## How It Works
 
-### 🔹 Compression
+### Compression
 
 1. Read input file
 2. Count frequency of each character
@@ -59,7 +59,7 @@ Output file → `.g5`
 
 ---
 
-### 🔹 Decompression
+### Decompression
 
 1. Read `.g5` file
 2. Reconstruct Huffman Tree
@@ -80,7 +80,7 @@ gcc main.c -o main
 
 ---
 
-## ▶️ Usage
+## Usage
 
 ### Compress
 
@@ -122,7 +122,7 @@ output.txt
 
 ---
 
-## 📊 Example
+## Example
 
 ```bash
 gcc main.c -o main
@@ -132,7 +132,7 @@ gcc main.c -o main
 
 ---
 
-## ✨ Features
+## Features
 
 * Lossless compression
 * Custom `.g5` format
@@ -142,7 +142,7 @@ gcc main.c -o main
 
 ---
 
-## ⚠️ Limitations
+## Limitations
 
 * Output filename must be entered manually
 * No GUI (command line only)
@@ -151,7 +151,7 @@ gcc main.c -o main
 
 ---
 
-## 🔮 Future Improvements
+## Future Improvements
 
 * Add command-line flags for output file
 * Improve error handling
@@ -161,7 +161,7 @@ gcc main.c -o main
 
 ---
 
-## 👨‍💻 Team
+## Team
 
 **Geeks 5**
 
@@ -172,7 +172,7 @@ gcc main.c -o main
 
 ---
 
-## 📌 Notes
+## Notes
 
 * Compression appends `.g5` automatically
 * Decompression appends `.txt` automatically
@@ -180,7 +180,7 @@ gcc main.c -o main
 
 ---
 
-## 📚 Reference
+## Reference
 
 Basic implementation inspired from standard Huffman Coding concepts and data structures.
 
